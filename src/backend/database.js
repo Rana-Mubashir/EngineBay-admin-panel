@@ -11,14 +11,14 @@ class Database {
         this.database = new Databases(this.client)
         this.storage = new Storage(this.client)
     }
-    async addProduct(name, discountedPrice,imageId, category, description, originalPrice) {
+    async addProduct(name,imageId, category, description, discountedPrice, originalPrice) {
         try {
             const session = await this.database.createDocument(
                 config.Database_id,
                 config.Product_ingredients,
                 ID.unique(),
                 {
-                    name, discountedPrice,imageId, category, description, originalPrice
+                    name,imageId, category, description, discountedPrice, originalPrice
                 }
             )
             return session
@@ -26,14 +26,14 @@ class Database {
             throw error
         }
     }
-    async updateProduct(productId,name, discountedPrice,imageId, category, description, originalPrice){
+    async updateProduct(productId,name,imageId, category, description, discountedPrice, originalPrice){
         try {
             await this.database.updateDocument(
                 config.Database_id,
                 config.Product_ingredients,
                 productId,
                 {
-                    name, discountedPrice,imageId, category, description, originalPrice
+                    name,imageId, category, description, discountedPrice, originalPrice
                 }
             )
         } catch (error) {
@@ -87,12 +87,13 @@ class Database {
     }
     async delImage(fileId){
         try {
-            this.storage.deleteFile(
+           const session= this.storage.deleteFile(
                 config.Bucket_id,
                 fileId
             )
+            return session
         } catch (error) {
-            
+            throw error
         }
     }
     getFilePre(fileId) {

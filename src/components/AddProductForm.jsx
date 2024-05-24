@@ -9,6 +9,7 @@ import Loader from './Loader';
 function AddProductForm() {
     const dispatch = useDispatch();
     const product = useSelector((state) => state.showList.product)
+    console.log(product)
     const [error, setError] = useState('')
     const [loader, setLoader] = useState(false);
     const navigate = useNavigate();
@@ -23,6 +24,7 @@ function AddProductForm() {
     })
     async function submit(data) {
         setLoader(true);
+        setError('')
         try {
             if (product) {
                 const file = await databaseService.uploadImage(data.image[0])
@@ -34,11 +36,11 @@ function AddProductForm() {
                     const updateDocument = await databaseService.updateProduct(
                         product.$id,
                         data.productName,
-                        data.discountedPrice,
                         imageId,
                         data.productCategory,
                         data.productDescription,
-                        data.originalPrice
+                        data.discountedPrice,
+                        data.originalPrice,
                     )
                     if (updateDocument) {
                         dispatch(productToUpdate(''))
@@ -51,13 +53,15 @@ function AddProductForm() {
                 const file = await databaseService.uploadImage(data.image[0]);
                 if (file) {
                     const imageId = file.$id;
+                    const discountedPrice = parseInt(data.discountedPrice, 10);
+                    const originalPrice = parseInt(data.originalPrice, 10);
                     const uploadDocument = await databaseService.addProduct(
                         data.productName,
-                        data.discountedPrice,
                         imageId,
                         data.productCategory,
                         data.productDescription,
-                        data.originalPrice
+                        discountedPrice,
+                        originalPrice
                     );
                     if (uploadDocument) {
                         navigate("/productList")

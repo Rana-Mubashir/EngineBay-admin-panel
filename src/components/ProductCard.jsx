@@ -32,7 +32,7 @@ const ProductCard = ({ product }) => {
                         >
                             Update
                         </button>
-                        <DeleteProduct productId={product.$id} />
+                        <DeleteProduct product={product} />
                     </div>
                 </div>
             </div>
